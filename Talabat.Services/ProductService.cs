@@ -41,7 +41,7 @@ namespace Talabat.Services
 		{
 			var spec = new ProductIncludingBrandsAndCategory(p => p.Id == id);
 
-			var product =  _unitOfWork.Repository<Product>().GetByIdWithSpec(spec);
+			var product =  _unitOfWork.Repository<Product>().GetEntityWithSpec(spec);
 
 			return product;
 		}

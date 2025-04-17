@@ -14,7 +14,7 @@ namespace Talabat.Core.RepositoryInterfaces
 		T? GetById(int id);
 
 		IReadOnlyList<T> GetAllWithSpec(ISpecification<T> spec);
-		T? GetByIdWithSpec(ISpecification<T> spec);
+		T? GetEntityWithSpec(ISpecification<T> spec);
 
 		void Add(T entity);
 		void Update(T entity);

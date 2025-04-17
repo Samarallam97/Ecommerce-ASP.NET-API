@@ -16,9 +16,9 @@ namespace Talabat.APIs.DTOs.Basket
 		[Required]
 		public string PictureUrl { get; set; }
 		[Required]
-		public string ProductCategory { get; set; }
+		public string Category { get; set; }
 		[Required]
-		public string ProductBrand { get; set; }
+		public string Brand { get; set; }
 		[Required]
 
 		[Range(1, int.MaxValue, ErrorMessage = "Quantity Can't be zero")]

@@ -47,6 +47,14 @@ namespace Talabat.APIs
 
 			builder.Services.AddIdentityServices(builder.Configuration);
 
+			builder.Services.AddCors(options =>
+			{
+				options.AddPolicy("MyPolicy", options =>
+				{
+					options.AllowAnyHeader().AllowAnyMethod().WithOrigins(builder.Configuration["FrontBaseUrl"]);
+				});
+			});
+
 			builder.Services.AddSwaggerServices();
 
 			#region Validation Error Handling
@@ -120,8 +128,10 @@ namespace Talabat.APIs
 			app.UseHttpsRedirection();
 
 			#region Not Found EndPoint Handling
-			app.UseStatusCodePagesWithReExecute("/error/{0}"); 
+			app.UseStatusCodePagesWithReExecute("/error/{0}");
 			#endregion
+
+			app.UseCors("MyPolicy");
 
 			app.MapControllers();
 

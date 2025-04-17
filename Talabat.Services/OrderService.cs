@@ -12,12 +12,13 @@ namespace Talabat.Service
 	{
 		private readonly IBasketRepository _basketRepository;
 		private readonly IUnitOfWork _unitOfWork;
+		private readonly IPayementService _payementService;
 
-
-		public OrderService(IBasketRepository basketRepository , IUnitOfWork unitOfWork)
+		public OrderService(IBasketRepository basketRepository , IUnitOfWork unitOfWork , IPayementService payementService)
         {
 			_basketRepository=basketRepository;
 			_unitOfWork=unitOfWork;
+			_payementService=payementService;
 		}
 		public async Task<Order?> CreateOrderAsync(string buyerEmail, string basketId, int deliveryMethodId, Address shippingAddress)
 		{
@@ -57,11 +58,23 @@ namespace Talabat.Service
 
 			var deliveryMethod =  _unitOfWork.Repository<DeliveryMethod>().GetById(deliveryMethodId);
 
+			var orderRepo = _unitOfWork.Repository<Order>();
+			// Validation step
+			var spec = new OrderWithPaymentIntentSpecification(basket.PaymentIntentId);
+
+			var existingOrder = orderRepo.GetEntityWithSpec(spec);
+
+			if(existingOrder is not null)
+			{
+				orderRepo.Delete(existingOrder);
+
+				await _payementService.CreateOrUpdatePayementIntent(basketId);
+			}
 			// 5. Create Order
 
-			var order = new Order(buyerEmail , shippingAddress , deliveryMethod , orderItems , subTotal);
+			var order = new Order(buyerEmail , shippingAddress , deliveryMethod , orderItems , subTotal , basket.PaymentIntentId);
 
-			 _unitOfWork.Repository<Order>().Add(order);
+			orderRepo.Add(order);
 
 			// 6. Save to database [ need Unit of work]
 
@@ -88,7 +101,7 @@ namespace Talabat.Service
 
 			var spec = new OrderSpecifications(orderId, buyerEmail);
 
-			var order = orderRepository.GetByIdWithSpec(spec);
+			var order = orderRepository.GetEntityWithSpec(spec);
 
 			return order;
 		}

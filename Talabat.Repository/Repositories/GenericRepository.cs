@@ -36,7 +36,7 @@ namespace Talabat.Repository.Repositories
 			return GetQuery(spec).ToList();
 		}
 
-		public T? GetByIdWithSpec(ISpecification<T> spec)
+		public T? GetEntityWithSpec(ISpecification<T> spec)
 		{
 			return GetQuery(spec).FirstOrDefault();
 		}

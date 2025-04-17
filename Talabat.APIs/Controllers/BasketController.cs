@@ -23,7 +23,6 @@ namespace Talabat.APIs.Controllers
 
 
 		[HttpGet]
-
 		public ActionResult<Basket> GetBasket(string id)
 		{
 			var basket = _basketRepository.GetBasket(id);
