@@ -1,9 +1,9 @@
 ## Features
-- Product catalog with brands and categories
 - User authentication with JWT
-- Order management and basket functionality
-- Entity Framework Core with SQL Server
-- Redis for basket caching
+- Product catalog with brands and categories applying Pagination & different filters
+- Order management and basket functionality using Redis
+- Caching Implementation with Redis
+- Payment Implementation with Stripe
 
 ## Prerequisites
 
