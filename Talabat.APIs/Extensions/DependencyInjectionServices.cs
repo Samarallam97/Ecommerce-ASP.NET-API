@@ -28,6 +28,7 @@ namespace Talabat.APIs.Extensions
 			Services.AddScoped(typeof(IOrderService), typeof(OrderService));
 			Services.AddScoped(typeof(IProductService), typeof(ProductService));
 			Services.AddScoped(typeof(IPayementService), typeof(PayementService));
+			Services.AddSingleton(typeof(ICacheService), typeof(CacheService));
 
 			#endregion
 

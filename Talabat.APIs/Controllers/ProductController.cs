@@ -25,26 +25,26 @@ namespace Talabat.APIs.Controllers
 			_mapper=mapper;
 		}
 
+		[CachingAttribute(600)]
 		[HttpGet]
 		public ActionResult<IReadOnlyList<ProductDTO>> GetAll([FromQuery] ProductParams productParams)
 		{
 			var products = _productService.GetAllProducts(productParams);
 
+			var count = _productService.GetCount(productParams);
+
 			var ProductDTOs = _mapper.Map<IReadOnlyList<Product> , IReadOnlyList<ProductDTO>>(products);	
 
-			if(productParams.PageSize is null )
-				return Ok(ProductDTOs);
-			else
-			{
-				var count = _productService.GetCount(productParams);
 
-				PaginationResponse<ProductDTO> paginationResponse = new
-					(productParams.PageSize.Value, productParams.PageIndex.Value, count, ProductDTOs);
+			var paginationResponse = new PaginationResponse<ProductDTO>
+					(productParams.PageSize, productParams.PageIndex, count, ProductDTOs);
 
-				return Ok(paginationResponse);
-			}
+			return Ok(paginationResponse);
+			
 		}
 
+
+		[CachingAttribute(600)]
 		[HttpGet("{id}")]
 		public ActionResult<ProductDTO> GetById(int id)
 		{
@@ -58,6 +58,8 @@ namespace Talabat.APIs.Controllers
 			return Ok(ProductDTO);
 		}
 
+
+		[CachingAttribute(600)]
 		[HttpGet("brands")]
 		public ActionResult<IReadOnlyList<Brand>> GetBrands()
 		{
@@ -65,6 +67,8 @@ namespace Talabat.APIs.Controllers
 			return Ok(brands);
 		}
 
+
+		[CachingAttribute(600)]
 		[HttpGet("categories")]
 		public ActionResult<IReadOnlyList<Category>> GetCategories()
 		{
